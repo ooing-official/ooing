@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ooing — Slow Skincare</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;700;800&family=Inter:wght@400;500;600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "on-surface-variant": "#c6c6c6",
+          "surface-container-low": "#1c1b1b",
+          "background": "#131313",
+          "outline-variant": "#474747",
+          "on-primary": "#1a1c1c",
+          "primary-container": "#d4d4d4",
+          "on-primary-container": "#000000",
+          "surface-container-lowest": "#0e0e0e",
+          "surface": "#131313",
+          "surface-container": "#201f1f",
+          "inverse-surface": "#e5e2e1",
+          "primary": "#ffffff",
+          "on-background": "#e5e2e1",
+          "outline": "#919191",
+        },
+        fontFamily: {
+          "headline": ["Manrope"],
+          "body": ["Manrope"],
+          "label": ["Inter"]
+        },
+        borderRadius: {"DEFAULT": "0px", "lg": "0px", "xl": "0px", "full": "9999px"},
+      },
+    },
+  }
+</script>
+<style>
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background-color: #131313;
+    color: #e5e2e1;
+    -webkit-font-smoothing: antialiased;
+    font-family: 'Manrope', sans-serif;
+    margin: 0;
+  }
+  .monolith-gradient {
+    background: radial-gradient(circle at center, rgba(212,212,212,0.05) 0%, rgba(19,19,19,0) 70%);
+  }
+  /* Scroll reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.85s cubic-bezier(.16,1,.3,1), transform 0.85s cubic-bezier(.16,1,.3,1);
+  }
+  .reveal.visible { opacity: 1; transform: none; }
+  .reveal-d1 { transition-delay: 0.1s; }
+  .reveal-d2 { transition-delay: 0.22s; }
+  .reveal-d3 { transition-delay: 0.36s; }
+  /* Marquee */
+  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  .marquee-inner { animation: marquee 28s linear infinite; white-space: nowrap; display: flex; }
+  /* Cursor blink */
+  @keyframes blink { 50% { opacity: 0; } }
+  .cursor { animation: blink 1.1s step-start infinite; }
+  /* Mobile menu */
+  #mobile-menu { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+  #mobile-menu.open { max-height: 300px; }
+  /* CTA button shimmer */
+  .btn-cta {
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-cta::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.1);
+    transform: translateX(-100%);
+    transition: transform 0.4s ease;
+  }
+  .btn-cta:hover::after { transform: translateX(0); }
+</style>
+</head>
+<body class="font-body selection:bg-[#d4d4d4] selection:text-black">
+
+<!-- ══════════════════════════
+     NAV
+══════════════════════════ -->
+<nav id="topnav" class="fixed top-0 w-full z-50 bg-[#131313]/85 backdrop-blur-md border-b border-white/5 transition-all duration-300">
+  <div class="flex justify-between items-center px-6 md:px-12 py-5 w-full max-w-[1920px] mx-auto">
+    <a href="#" class="text-2xl font-extrabold tracking-[-0.02em] text-white uppercase font-headline select-none">ooing</a>
+    <div class="hidden md:flex items-center gap-12">
+      <a href="#shop" class="font-medium tracking-tight text-sm text-[#C6C6C6] hover:text-white transition-colors duration-300">Shop</a>
+      <a href="#about" class="font-medium tracking-tight text-sm text-[#C6C6C6] hover:text-white transition-colors duration-300">About</a>
+      <a href="#journal" class="font-medium tracking-tight text-sm text-white font-bold border-b border-white pb-0.5">Journal</a>
+    </div>
+    <div class="flex items-center gap-4">
+      <button aria-label="Cart" class="text-white hover:text-[#C6C6C6] transition-colors duration-300">
+        <span class="material-symbols-outlined" style="font-size:22px;">shopping_bag</span>
+      </button>
+      <button id="menu-toggle" class="md:hidden text-white" aria-label="Toggle menu">
+        <span class="material-symbols-outlined" style="font-size:22px;">menu</span>
+      </button>
+    </div>
+  </div>
+  <div id="mobile-menu" class="md:hidden bg-[#0e0e0e] px-6">
+    <div class="py-6 flex flex-col gap-5 border-t border-white/10">
+      <a href="#shop" class="text-xs uppercase tracking-widest text-[#C6C6C6] hover:text-white transition-colors">Shop</a>
+      <a href="#about" class="text-xs uppercase tracking-widest text-[#C6C6C6] hover:text-white transition-colors">About</a>
+      <a href="#journal" class="text-xs uppercase tracking-widest text-white">Journal</a>
+    </div>
+  </div>
+</nav>
+
+<main class="pt-28 pb-24 overflow-hidden">
+
+  <!-- HERO -->
+  <section class="px-6 md:px-12 mb-24 md:mb-48">
+    <div class="max-w-[1440px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-end">
+      <div class="md:col-span-8 reveal">
+        <span class="font-['Inter'] text-[0.6875rem] uppercase tracking-[0.2em] text-[#C6C6C6] block mb-8">Volume 01 — Philosophy</span>
+        <h1 class="text-[3rem] md:text-[5rem] font-extrabold leading-[1.08] tracking-[-0.04em] text-white mb-12">
+          The art of <br/>intentional <br/>presence<span class="cursor text-[#474747]">_</span>
+        </h1>
+      </div>
+      <div class="md:col-span-4 pb-4 reveal reveal-d2">
+        <p class="text-base md:text-lg text-[#C6C6C6] leading-relaxed font-light">
+          ooing exists at the intersection of architectural permanence and the transient nature of self-care. We believe in the beauty of the slow, the deliberate, and the silent.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="overflow-hidden border-y border-[#474747]/30 py-3 mb-24 md:mb-48">
+    <div class="marquee-inner gap-12 text-[#474747] font-['Inter'] text-[0.62rem] uppercase tracking-[0.28em]">
+      <span class="mr-12">Slow Skincare &nbsp;—&nbsp; Architectural Beauty &nbsp;—&nbsp; Intentional Presence &nbsp;—&nbsp; Cold-Pressed Botanicals &nbsp;—&nbsp; Zero Synthetic Fragrance &nbsp;—&nbsp; Weighty Glass &nbsp;—&nbsp; Anodized Aluminum &nbsp;—&nbsp;</span>
+      <span class="mr-12">Slow Skincare &nbsp;—&nbsp; Architectural Beauty &nbsp;—&nbsp; Intentional Presence &nbsp;—&nbsp; Cold-Pressed Botanicals &nbsp;—&nbsp; Zero Synthetic Fragrance &nbsp;—&nbsp; Weighty Glass &nbsp;—&nbsp; Anodized Aluminum &nbsp;—&nbsp;</span>
+    </div>
+  </div>
+
+  <!-- VISUAL ANCHOR -->
+  <section class="mb-24 md:mb-64 relative">
+    <div class="absolute inset-0 monolith-gradient pointer-events-none"></div>
+    <div class="max-w-[1920px] mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-12 gap-0 items-start">
+      <div class="md:col-span-7 aspect-[4/5] bg-[#1c1b1b] overflow-hidden relative group reveal">
+        <img
+          alt="Architectural concrete"
+          class="w-full h-full object-cover grayscale brightness-75 transition-transform duration-700 group-hover:scale-105"
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbXrdSvuJT-pYJa_9dYboAonwE6ZFuugmen3M2c6WKoUmLia1y7J6VdmcuZhATCA-sAdkk2V5dC4v8WBxVqk1VLjpIGw_dRBBF2CPEE_caGptE9yQwE5YBb3WNIqJ0c_26ZBP5LKSLa3fuBgDnwTMD4I16GLwuwRfrzVO0AGozQR7itYwT28biru74-zha4Oh_0SnIyhGw1WszspRydCTtXvlTlA-hgz46ejnxE5ShwoY_MPc5_vTPWFvGG_CoAL6YYpPfZ72axoY"
+        />
+        <div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/60 to-transparent">
+          <span class="font-['Inter'] text-[0.6rem] uppercase tracking-[0.25em] text-[#919191]">001 / Monolith Series</span>
+        </div>
+      </div>
+      <div class="md:col-span-4 md:col-start-9 mt-12 md:mt-48 reveal reveal-d2">
+        <h2 class="text-[1.75rem] font-bold text-white mb-8 font-headline">Space to Breathe</h2>
+        <p class="text-[#C6C6C6] leading-relaxed mb-12 text-sm">
+          Our products are designed as artifacts. Not meant to clutter, but to anchor. Like a single shaft of light in a dark room, each formula is focused, refined, and essential.
+        </p>
+        <div class="w-24 h-px bg-[#474747]/40 mb-12"></div>
+        <div class="grid grid-cols-3 gap-4 border-t border-[#474747]/20 pt-8">
+          <div>
+            <p class="text-white font-bold text-xl font-headline">03</p>
+            <p class="text-[#919191] text-[0.6rem] uppercase tracking-widest mt-1">Formulas</p>
+          </div>
+          <div>
+            <p class="text-white font-bold text-xl font-headline">100%</p>
+            <p class="text-[#919191] text-[0.6rem] uppercase tracking-widest mt-1">Natural</p>
+          </div>
+          <div>
+            <p class="text-white font-bold text-xl font-headline">0</p>
+            <p class="text-[#919191] text-[0.6rem] uppercase tracking-widest mt-1">Synthetics</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NARRATIVE -->
+  <section id="about" class="bg-[#0e0e0e] py-24 md:py-48 mb-24 md:mb-64">
+    <div class="max-w-[1440px] mx-auto px-6 md:px-12">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-12">
+        <div class="md:col-span-5 reveal">
+          <h3 class="font-['Inter'] text-[0.6875rem] uppercase tracking-[0.2em] text-[#C6C6C6] mb-6">Process</h3>
+          <p class="text-xl md:text-2xl font-light text-white leading-snug">
+            We discard the noise of the modern cosmetic industry. No seasonal trends. No excessive rituals. Just high-performance integrity housed in lasting forms.
+          </p>
+        </div>
+        <div class="md:col-span-6 md:col-start-7 space-y-12 md:space-y-24">
+          <div class="grid grid-cols-2 gap-8 md:gap-12 reveal reveal-d1">
+            <div class="aspect-square bg-[#131313] overflow-hidden group">
+              <img alt="Product texture" class="w-full h-full object-cover grayscale opacity-80 transition-transform duration-700 group-hover:scale-105"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDK-oT5vSf4b8zenqGFQNLOKos2rj84uFqEm9pgyi8tNVQrcwjubqV3LRA2Y247E17_kSantln-Tq52Rg1Eqn03bUURTdZrWKZK1gS9HwT89X4Jvog_pxMRalUdrK4pr7IVqLIIKoDmfjjZofE29uVxm3_P-sbSPJXTyAN-Gzj8K2ihFe8OhJMNbMVOmw_CZbr3qhyseI6ELy7RuugnK94IFX-YURydQp-XWDUPzV0yu-CSSWi9t2AmyFNuo8uZQdjt8OdItxaVwYI"/>
+            </div>
+            <div class="flex flex-col justify-end">
+              <h4 class="text-xs font-bold text-white uppercase tracking-widest mb-4">The Formula</h4>
+              <p class="text-[0.65rem] text-[#C6C6C6] leading-relaxed uppercase tracking-tighter">
+                01. Cold-pressed botanicals<br/>
+                02. Architectural molecular weight<br/>
+                03. Zero synthetic fragrance
+              </p>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-8 md:gap-12 reveal reveal-d2">
+            <div class="flex flex-col justify-end text-right order-2 md:order-1">
+              <h4 class="text-xs font-bold text-white uppercase tracking-widest mb-4">The Vessel</h4>
+              <p class="text-[0.65rem] text-[#C6C6C6] leading-relaxed uppercase tracking-tighter">
+                Weighty glass.<br/>Anodized aluminum.<br/>Recycled paper stock.
+              </p>
+            </div>
+            <div class="aspect-square bg-[#131313] overflow-hidden order-1 md:order-2 group">
+              <img alt="Glass vessel shadow" class="w-full h-full object-cover grayscale opacity-60 transition-transform duration-700 group-hover:scale-105"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBddMf1eorvzvKkUuy1awEHBiuEZJP1CmvDAbBl8O3N_dnSx1njDHhLQf-6NIXcD7_tBmBTlY094NqiJfH52pkVDULjvSgxPBX_bhP_NTxi3I9SfTzq3JZzL3XHOl9EUK4zRlch4yTM2Zyx03dukQDW_iErxOQigURYrgIcP7lQ8tkcuXFXkm_lbogthCkpKsmXM0G_E8WG1Uqbr78HtGT1z_Me-SJAXPGcIh0ZotDCwNEY5cmMiBsOYzbRqKvDgBN7x-Aj2UM7ikI"/>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUOTE -->
+  <section class="px-6 md:px-12 mb-24 md:mb-64">
+    <div class="max-w-[1440px] mx-auto text-center py-16 md:py-32 border-y border-[#474747]/10 reveal">
+      <blockquote class="text-[1.8rem] md:text-[4rem] font-bold tracking-tight text-white max-w-4xl mx-auto leading-none mb-8 md:mb-12 italic">
+        "Luxury is not the presence of everything, but the absence of the unnecessary."
+      </blockquote>
+      <cite class="font-['Inter'] text-[0.6875rem] uppercase tracking-[0.3em] text-[#C6C6C6] not-italic">— The Journal, ooing</cite>
+    </div>
+  </section>
+
+  <!-- PRODUCT TEASE -->
+  <section id="shop" class="px-6 md:px-12 mb-24 md:mb-32">
+    <div class="max-w-[1440px] mx-auto">
+      <div class="flex justify-between items-end mb-12 reveal">
+        <div>
+          <span class="font-['Inter'] text-[0.6875rem] uppercase tracking-[0.2em] text-[#C6C6C6] block mb-3">The Edit</span>
+          <h2 class="text-3xl font-bold text-white font-headline">Current Collection</h2>
+        </div>
+        <a href="#" class="hidden md:block font-['Inter'] text-[0.65rem] uppercase tracking-[0.2em] text-[#C6C6C6] hover:text-white transition-colors border-b border-[#474747] pb-0.5">View All</a>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-0.5">
+        <div class="group bg-[#1c1b1b] aspect-[3/4] relative overflow-hidden reveal reveal-d1">
+          <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-8">
+            <div class="w-px h-16 bg-[#474747] mb-6"></div>
+            <p class="font-['Inter'] text-[0.6rem] uppercase tracking-[0.3em] text-[#919191]">Coming Soon</p>
+            <p class="text-white font-bold text-lg mt-3 font-headline">Serum I</p>
+          </div>
+          <div class="absolute bottom-0 left-0 right-0 h-px bg-[#474747]/30 group-hover:bg-white/20 transition-colors duration-500"></div>
+        </div>
+        <div class="group bg-[#1c1b1b] aspect-[3/4] relative overflow-hidden reveal reveal-d2">
+          <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-8">
+            <div class="w-px h-16 bg-[#474747] mb-6"></div>
+            <p class="font-['Inter'] text-[0.6rem] uppercase tracking-[0.3em] text-[#919191]">Coming Soon</p>
+            <p class="text-white font-bold text-lg mt-3 font-headline">Oil II</p>
+          </div>
+          <div class="absolute bottom-0 left-0 right-0 h-px bg-[#474747]/30 group-hover:bg-white/20 transition-colors duration-500"></div>
+        </div>
+        <div class="group bg-[#1c1b1b] aspect-[3/4] relative overflow-hidden reveal reveal-d3">
+          <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-8">
+            <div class="w-px h-16 bg-[#474747] mb-6"></div>
+            <p class="font-['Inter'] text-[0.6rem] uppercase tracking-[0.3em] text-[#919191]">Coming Soon</p>
+            <p class="text-white font-bold text-lg mt-3 font-headline">Mist III</p>
+          </div>
+          <div class="absolute bottom-0 left-0 right-0 h-px bg-[#474747]/30 group-hover:bg-white/20 transition-colors duration-500"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA FULL BLEED -->
+  <section class="px-6 md:px-12 mb-16 md:mb-32">
+    <div class="max-w-[1440px] mx-auto">
+      <div class="relative h-[400px] md:h-[600px] overflow-hidden group reveal">
+        <img alt="Studio space"
+          class="w-full h-full object-cover grayscale brightness-50 transition-transform duration-1000 group-hover:scale-105"
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuDP4t6Iq_UlbLWSqGC0JmF8PHH6I_Z8mjdzjo29ukzzrhXKDZCyv9brd2gWbDMH9lzBUtRnWDYZuKLDviyyoIbw9aSv63sTnJOby9IUmxgafpQ8oImn3qKB4KIYYvMZfo5UYjjv0wDxkF_GV0YyBjeNqAuTVe6WhvRqWrmAKobJymnqj0xiULuDzMPu2-kZe3HyTeUCSDZIykThMhGC9Pq-Bn580YP0o"
+        />
+        <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-8">
+          <span class="font-['Inter'] text-[0.6rem] uppercase tracking-[0.3em] text-[#919191] mb-6 block">The Collection</span>
+          <h2 class="text-3xl md:text-4xl font-bold text-white mb-8 font-headline uppercase tracking-widest">Experience the edit</h2>
+          <a href="#shop" class="btn-cta inline-block bg-white text-[#1a1c1c] px-10 md:px-12 py-4 md:py-5 text-xs font-bold uppercase tracking-[0.2em] hover:bg-[#d4d4d4] transition-colors duration-300">
+            Explore the Collection
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- JOURNAL -->
+  <section id="journal" class="px-6 md:px-12 mb-16">
+    <div class="max-w-[1440px] mx-auto">
+      <div class="flex justify-between items-end mb-12 reveal">
+        <div>
+          <span class="font-['Inter'] text-[0.6875rem] uppercase tracking-[0.2em] text-[#C6C6C6] block mb-3">Vol. 01</span>
+          <h2 class="text-3xl font-bold text-white font-headline">Journal</h2>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-0.5">
+        <article class="bg-[#1c1b1b] p-10 group cursor-pointer hover:bg-[#222121] transition-colors duration-300 reveal reveal-d1">
+          <span class="font-['Inter'] text-[0.6rem] uppercase tracking-[0.25em] text-[#919191] block mb-6">Philosophy</span>
+          <h3 class="text-xl font-bold text-white font-headline mb-4 group-hover:text-[#C6C6C6] transition-colors">On the ethics of minimal formulation</h3>
+          <p class="text-sm text-[#919191] leading-relaxed mb-8">A deep examination of what it means to strip a skincare formula to its essential truth — and why so few brands dare to do it.</p>
+          <div class="flex items-center gap-3 text-[#474747] group-hover:text-[#919191] transition-colors">
+            <span class="font-['Inter'] text-[0.6rem] uppercase tracking-[0.2em]">Read</span>
+            <span class="material-symbols-outlined" style="font-size:14px;">arrow_forward</span>
+          </div>
+        </article>
+        <article class="bg-[#1c1b1b] p-10 group cursor-pointer hover:bg-[#222121] transition-colors duration-300 reveal reveal-d2">
+          <span class="font-['Inter'] text-[0.6rem] uppercase tracking-[0.25em] text-[#919191] block mb-6">Material</span>
+          <h3 class="text-xl font-bold text-white font-headline mb-4 group-hover:text-[#C6C6C6] transition-colors">Glass as a design decision, not an aesthetic</h3>
+          <p class="text-sm text-[#919191] leading-relaxed mb-8">Why we chose anodized aluminum and recycled glass — and what that decision cost us, and saved everything else.</p>
+          <div class="flex items-center gap-3 text-[#474747] group-hover:text-[#919191] transition-colors">
+            <span class="font-['Inter'] text-[0.6rem] uppercase tracking-[0.2em]">Read</span>
+            <span class="material-symbols-outlined" style="font-size:14px;">arrow_forward</span>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="w-full py-16 md:py-20 px-6 md:px-12 bg-[#0E0E0E] border-t border-[#474747]/20">
+  <div class="flex flex-col md:flex-row justify-between items-start gap-12 w-full max-w-[1920px] mx-auto">
+    <div class="flex flex-col gap-6">
+      <div class="text-xl font-bold text-white font-headline uppercase tracking-widest">ooing</div>
+      <p class="font-['Inter'] text-[11px] uppercase tracking-[0.1em] text-[#C6C6C6] max-w-xs leading-relaxed">
+        Curating a life of quiet intensity and architectural beauty through the science of slow skincare.
+      </p>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-10 md:gap-12">
+      <div class="flex flex-col gap-4">
+        <span class="font-['Inter'] text-[11px] font-bold text-white uppercase tracking-[0.1em]">Navigation</span>
+        <a href="#shop" class="font-['Inter'] text-[11px] uppercase tracking-[0.1em] text-[#C6C6C6] hover:text-white transition-colors duration-300">Shop</a>
+        <a href="#journal" class="font-['Inter'] text-[11px] uppercase tracking-[0.1em] text-[#C6C6C6] hover:text-white transition-colors duration-300">Journal</a>
+        <a href="#" class="font-['Inter'] text-[11px] uppercase tracking-[0.1em] text-[#C6C6C6] hover:text-white transition-colors duration-300">Stockists</a>
+      </div>
+      <div class="flex flex-col gap-4">
+        <span class="font-['Inter'] text-[11px] font-bold text-white uppercase tracking-[0.1em]">Information</span>
+        <a href="#" class="font-['Inter'] text-[11px] uppercase tracking-[0.1em] text-[#C6C6C6] hover:text-white transition-colors duration-300">Privacy</a>
+        <a href="#" class="font-['Inter'] text-[11px] uppercase tracking-[0.1em] text-[#C6C6C6] hover:text-white transition-colors duration-300">Terms</a>
+        <a href="#" class="font-['Inter'] text-[11px] uppercase tracking-[0.1em] text-[#C6C6C6] hover:text-white transition-colors duration-300">Shipping</a>
+      </div>
+      <div class="flex flex-col gap-4">
+        <span class="font-['Inter'] text-[11px] font-bold text-white uppercase tracking-[0.1em]">Contact</span>
+        <a href="#" class="font-['Inter'] text-[11px] uppercase tracking-[0.1em] text-[#C6C6C6] hover:text-white transition-colors duration-300">Instagram</a>
+        <a href="#" class="font-['Inter'] text-[11px] uppercase tracking-[0.1em] text-[#C6C6C6] hover:text-white transition-colors duration-300">Email</a>
+      </div>
+    </div>
+  </div>
+  <div class="mt-16 pt-8 border-t border-[#474747]/10 flex flex-col md:flex-row justify-between items-center gap-4 max-w-[1920px] mx-auto">
+    <span class="font-['Inter'] text-[11px] uppercase tracking-[0.1em] text-[#C6C6C6]">© 2024 ooing. All rights reserved.</span>
+    <span class="font-['Inter'] text-[11px] uppercase tracking-[0.1em] text-[#C6C6C6]">Designed for the monolith.</span>
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 });
+  revealEls.forEach(el => io.observe(el));
+
+  // Nav border on scroll
+  const nav = document.getElementById('topnav');
+  window.addEventListener('scroll', () => {
+    nav.style.borderBottomColor = window.scrollY > 40 ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.03)';
+  }, { passive: true });
+
+  // Mobile menu
+  document.getElementById('menu-toggle').addEventListener('click', () => {
+    document.getElementById('mobile-menu').classList.toggle('open');
+  });
+
+  // Close mobile menu on link click
+  document.querySelectorAll('#mobile-menu a').forEach(a => {
+    a.addEventListener('click', () => document.getElementById('mobile-menu').classList.remove('open'));
+  });
+</script>
+</body>
+</html>
